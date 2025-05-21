@@ -3,44 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert between HTML and Markdown formats with this simple online tool">
     <title>HTML ⟷ Markdown Converter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <main class="container">
         <h1>HTML ⟷ Markdown Converter</h1>
         
-        <div class="conversion-options">
+        <fieldset class="conversion-options">
+            <legend class="visually-hidden">Conversion Direction</legend>
             <input type="radio" id="html-to-markdown" name="conversion-type" value="html-to-markdown" checked>
             <label for="html-to-markdown">HTML → Markdown</label>
             
             <input type="radio" id="markdown-to-html" name="conversion-type" value="markdown-to-html">
             <label for="markdown-to-html">Markdown → HTML</label>
-        </div>
+        </fieldset>
         
-        <div class="conversion-area">
+        <section class="conversion-area" aria-label="Conversion Tool">
             <div class="input-area">
                 <h2 id="input-label">HTML Input</h2>
-                <textarea id="input-text" placeholder="Enter your HTML text here..."></textarea>
-                <div class="info">Press Ctrl+Enter to quickly convert</div>
+                <textarea id="input-text" placeholder="Enter your HTML text here..." aria-labelledby="input-label"></textarea>
+                <div class="info" aria-live="polite">Press Ctrl+Enter to quickly convert</div>
             </div>
             
-            <button id="convert-button">Convert</button>
+            <button id="convert-button" aria-label="Convert content">Convert</button>
             
             <div class="output-area">
                 <h2 id="output-label">Markdown Output</h2>
-                <textarea id="output-text" readonly></textarea>
+                <textarea id="output-text" readonly aria-labelledby="output-label"></textarea>
                 <div class="controls">
-                    <button id="copy-button" title="Copy to clipboard">Copy</button>
-                    <button id="clear-button" title="Clear both fields">Clear</button>
+                    <button id="copy-button" title="Copy to clipboard" aria-label="Copy to clipboard">Copy</button>
+                    <button id="clear-button" title="Clear both fields" aria-label="Clear both fields">Clear</button>
                 </div>
             </div>
-        </div>
+        </section>
         
         <footer>
             <p>Simple HTML ⟷ Markdown converter. Produces clean output without styles, classes, CSS, or JavaScript.</p>
         </footer>
-    </div>
+    </main>
     
     <!-- Include the necessary libraries -->
     <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.js"></script>
