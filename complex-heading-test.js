@@ -1,7 +1,7 @@
 const TurndownService = require('turndown')
 
-// Test with our fixed implementation
-console.log("=== FINAL TEST ===");
+// Test with complex HTML containing headings and other elements
+console.log("=== COMPLEX HEADING TEST ===");
 const turndownService = new TurndownService({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced',
@@ -12,7 +12,7 @@ const turndownService = new TurndownService({
   br: '  \n'
 });
 
-// Add our fixed rule
+// Add rule with fix for headings
 turndownService.addRule('removeAttributes', {
   filter: function(node) {
     return node.nodeName !== 'A' && 
@@ -37,27 +37,47 @@ turndownService.addRule('removeAttributes', {
   }
 });
 
-// Complex example with both line breaks and bullet points
+// Test complex HTML with headings mixed with other elements
 const complexHtml = `
 <div>
-  <h2>Test Document</h2>
-  <p>This is a paragraph with <br>multiple line<br>breaks.</p>
+  <h1>Main Document Title</h1>
+  <p>This is an introduction paragraph.</p>
+  
+  <h2>Section 1</h2>
+  <p>This is the first section with a <a href="https://example.com">link</a>.</p>
   <ul>
-    <li>Item 1</li>
-    <li>Item 2 with <strong>bold</strong> text</li>
-    <li>Item 3 with <br>a line break</li>
+    <li>List item 1</li>
+    <li>List item 2</li>
   </ul>
-  <p>Another paragraph.</p>
+  
+  <h3>Subsection 1.1</h3>
+  <p>This is a subsection with some <strong>bold</strong> and <em>italic</em> text.</p>
   <pre>
-    Some pre-formatted code
-    with multiple lines
+    function example() {
+      return "This is a code block";
+    }
   </pre>
-  <h3>A Subsection</h3>
-  <p>Some additional text in the subsection.</p>
+  
+  <h2>Section 2</h2>
+  <p>This is the second section.</p>
+  <table>
+    <tr>
+      <th>Header 1</th>
+      <th>Header 2</th>
+    </tr>
+    <tr>
+      <td>Row 1, Cell 1</td>
+      <td>Row 1, Cell 2</td>
+    </tr>
+    <tr>
+      <td>Row 2, Cell 1</td>
+      <td>Row 2, Cell 2</td>
+    </tr>
+  </table>
 </div>
 `;
 
-console.log("Original HTML:");
+console.log("Complex HTML with Headings:");
 console.log(complexHtml);
 console.log("\nConverted Markdown:");
 console.log(turndownService.turndown(complexHtml));
