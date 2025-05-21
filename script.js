@@ -24,7 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Focus on getting clean HTML without styles, classes, etc.
     turndownService.addRule('removeAttributes', {
         filter: function(node) {
-            return node.nodeName !== 'A' && node.nodeName !== 'IMG';
+            // Only target nodes where we want to remove attributes but preserve structure
+            // Exclude nodes that have special handling or are structural elements
+            return node.nodeName !== 'A' && 
+                   node.nodeName !== 'IMG' && 
+                   node.nodeName !== 'UL' && 
+                   node.nodeName !== 'OL' && 
+                   node.nodeName !== 'LI' && 
+                   node.nodeName !== 'BR' && 
+                   node.nodeName !== 'P';
         },
         replacement: function(content, node) {
             if (node.nodeName === 'PRE') {
