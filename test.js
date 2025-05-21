@@ -60,7 +60,14 @@ function testCustomRules() {
   // Add a rule similar to the one in script.js
   turndownService.addRule('removeAttributes', {
     filter: function(node) {
-      return node.nodeName !== 'A' && node.nodeName !== 'IMG';
+      return node.nodeName !== 'A' && 
+             node.nodeName !== 'IMG' &&
+             node.nodeName !== 'H1' &&
+             node.nodeName !== 'H2' &&
+             node.nodeName !== 'H3' &&
+             node.nodeName !== 'H4' &&
+             node.nodeName !== 'H5' &&
+             node.nodeName !== 'H6';
     },
     replacement: function(content, node) {
       if (node.nodeName === 'PRE') {

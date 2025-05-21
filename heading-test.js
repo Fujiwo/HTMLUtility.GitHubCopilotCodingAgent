@@ -12,7 +12,7 @@ const turndownService = new TurndownService({
   br: '  \n'
 });
 
-// Add existing rule
+// Add existing rule with fix for headings
 turndownService.addRule('removeAttributes', {
   filter: function(node) {
     return node.nodeName !== 'A' && 
@@ -21,7 +21,13 @@ turndownService.addRule('removeAttributes', {
            node.nodeName !== 'OL' && 
            node.nodeName !== 'LI' && 
            node.nodeName !== 'BR' && 
-           node.nodeName !== 'P';
+           node.nodeName !== 'P' &&
+           node.nodeName !== 'H1' &&
+           node.nodeName !== 'H2' &&
+           node.nodeName !== 'H3' &&
+           node.nodeName !== 'H4' &&
+           node.nodeName !== 'H5' &&
+           node.nodeName !== 'H6';
   },
   replacement: function(content, node) {
     if (node.nodeName === 'PRE') {
