@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Get DOM elements using modern querySelector where appropriate
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
     const convertButton = document.getElementById('convert-button');
@@ -23,24 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove unwanted attributes from HTML elements
     // Focus on getting clean HTML without styles, classes, etc.
     turndownService.addRule('removeAttributes', {
-        filter: function(node) {
+        filter: (node) => {
+            // Define a set of node types we want to preserve
+            const preserveNodes = new Set([
+                'A', 'IMG', 'UL', 'OL', 'LI', 'BR', 'P',
+                'H1', 'H2', 'H3', 'H4', 'H5', 'H6'
+            ]);
+            
             // Only target nodes where we want to remove attributes but preserve structure
-            // Exclude nodes that have special handling or are structural elements
-            return node.nodeName !== 'A' && 
-                   node.nodeName !== 'IMG' && 
-                   node.nodeName !== 'UL' && 
-                   node.nodeName !== 'OL' && 
-                   node.nodeName !== 'LI' && 
-                   node.nodeName !== 'BR' && 
-                   node.nodeName !== 'P' &&
-                   node.nodeName !== 'H1' &&
-                   node.nodeName !== 'H2' &&
-                   node.nodeName !== 'H3' &&
-                   node.nodeName !== 'H4' &&
-                   node.nodeName !== 'H5' &&
-                   node.nodeName !== 'H6';
+            return !preserveNodes.has(node.nodeName);
         },
-        replacement: function(content, node) {
+        replacement: (content, node) => {
             if (node.nodeName === 'PRE') {
                 return '\n```\n' + content + '\n```\n';
             }
@@ -51,17 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add support for HTML tables
     turndownService.addRule('tableRule', {
         filter: ['table'],
-        replacement: function(content, node) {
+        replacement: (content, node) => {
             // Process the table by rows
             const rows = node.querySelectorAll('tr');
             if (rows.length === 0) return content;
 
-            let markdownTable = [];
-            let headerSeparator = [];
+            const markdownTable = [];
+            const headerSeparator = [];
             
             // Process each row
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+            [...rows].forEach((row, i) => {
                 const cells = row.querySelectorAll('th, td');
                 const isHeaderRow = row.parentNode.tagName === 'THEAD' || 
                                    (i === 0 && row.querySelectorAll('th').length > 0);
@@ -69,26 +62,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 let markdownRow = '| ';
                 
                 // Process each cell
-                for (let j = 0; j < cells.length; j++) {
-                    const cellContent = cells[j].textContent.trim();
-                    markdownRow += cellContent + ' | ';
+                [...cells].forEach((cell, j) => {
+                    const cellContent = cell.textContent.trim();
+                    markdownRow += `${cellContent} | `;
                     
                     // If this is a header row, prepare the separator
                     if (isHeaderRow) {
                         // Create the header separator (using at least 3 dashes)
                         const dashes = '-'.repeat(Math.max(3, cellContent.length));
-                        headerSeparator.push(dashes);
+                        headerSeparator[j] = dashes;
                     }
-                }
+                });
                 
                 // Add the row to the table
                 markdownTable.push(markdownRow);
                 
                 // If this was the header row, add the separator
                 if (isHeaderRow && headerSeparator.length > 0) {
-                    markdownTable.push('| ' + headerSeparator.map(dashes => dashes + ' ').join('| ') + '|');
+                    markdownTable.push(`| ${headerSeparator.map(dashes => `${dashes} `).join('| ')}|`);
                 }
-            }
+            });
             
             // Return the markdown table with an empty line before and after
             return '\n\n' + markdownTable.join('\n') + '\n\n';
@@ -106,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Update labels and placeholder text based on selected conversion type
-    function updateLabels() {
+    const updateLabels = () => {
         if (htmlToMarkdownOption.checked) {
             inputLabel.textContent = 'HTML Input';
             outputLabel.textContent = 'Markdown Output';
@@ -116,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
             outputLabel.textContent = 'HTML Output';
             inputText.placeholder = 'Enter your Markdown text here...';
         }
-    }
+    };
 
     // Conversion function
-    function convertText() {
+    const convertText = () => {
         const text = inputText.value.trim();
         
         if (!text) {
@@ -140,27 +133,37 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             outputText.value = `Error during conversion: ${error.message}`;
         }
-    }
+    };
 
-    // Copy output to clipboard
-    function copyToClipboard() {
-        outputText.select();
-        document.execCommand('copy');
-        
-        // Visual feedback
-        const originalText = copyButton.textContent;
-        copyButton.textContent = 'Copied!';
-        setTimeout(() => {
-            copyButton.textContent = originalText;
-        }, 1500);
+    // Copy output to clipboard using the modern Clipboard API with fallback
+    async function copyToClipboard() {
+        try {
+            // Use modern Clipboard API if available
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(outputText.value);
+            } else {
+                // Fallback for older browsers
+                outputText.select();
+                document.execCommand('copy');
+            }
+            
+            // Visual feedback
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copied!';
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+            }, 1500);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
     }
 
     // Clear both input and output fields
-    function clearFields() {
+    const clearFields = () => {
         inputText.value = '';
         outputText.value = '';
         inputText.focus();
-    }
+    };
 
     // Event listeners
     htmlToMarkdownOption.addEventListener('change', updateLabels);
@@ -169,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     copyButton.addEventListener('click', copyToClipboard);
     clearButton.addEventListener('click', clearFields);
     
-    // Also convert on press of Enter when in the input field
+    // Also convert on press of Ctrl+Enter when in the input field
     inputText.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && event.ctrlKey) {
             convertText();

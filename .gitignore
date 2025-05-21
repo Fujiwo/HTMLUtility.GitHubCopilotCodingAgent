@@ -6,9 +6,7 @@ yarn-error.log*
 package-lock.json
 
 # Test files
-test.js
-test-fixed.js
-test.html
+tests/
 
 # Environment files
 .env
