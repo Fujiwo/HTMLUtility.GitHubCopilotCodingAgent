@@ -1,7 +1,7 @@
 const TurndownService = require('turndown')
 
-// Test how tables are handled
-console.log("=== TABLE TEST ===");
+// Test with complex HTML containing headings and other elements
+console.log("=== COMPLEX HEADING TEST ===");
 const turndownService = new TurndownService({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced',
@@ -12,7 +12,7 @@ const turndownService = new TurndownService({
   br: '  \n'
 });
 
-// Add the existing rule from script.js
+// Add rule with fix for headings
 turndownService.addRule('removeAttributes', {
   filter: function(node) {
     return node.nodeName !== 'A' && 
@@ -37,30 +37,47 @@ turndownService.addRule('removeAttributes', {
   }
 });
 
-// Test HTML table
-const tableHtml = `
-<table>
-  <thead>
+// Test complex HTML with headings mixed with other elements
+const complexHtml = `
+<div>
+  <h1>Main Document Title</h1>
+  <p>This is an introduction paragraph.</p>
+  
+  <h2>Section 1</h2>
+  <p>This is the first section with a <a href="https://example.com">link</a>.</p>
+  <ul>
+    <li>List item 1</li>
+    <li>List item 2</li>
+  </ul>
+  
+  <h3>Subsection 1.1</h3>
+  <p>This is a subsection with some <strong>bold</strong> and <em>italic</em> text.</p>
+  <pre>
+    function example() {
+      return "This is a code block";
+    }
+  </pre>
+  
+  <h2>Section 2</h2>
+  <p>This is the second section.</p>
+  <table>
     <tr>
       <th>Header 1</th>
       <th>Header 2</th>
-      <th>Header 3</th>
     </tr>
-  </thead>
-  <tbody>
     <tr>
       <td>Row 1, Cell 1</td>
       <td>Row 1, Cell 2</td>
-      <td>Row 1, Cell 3</td>
     </tr>
     <tr>
       <td>Row 2, Cell 1</td>
       <td>Row 2, Cell 2</td>
-      <td>Row 2, Cell 3</td>
     </tr>
-  </tbody>
-</table>
+  </table>
+</div>
 `;
 
-console.log("Table HTML:", tableHtml);
-console.log("Table Markdown:", turndownService.turndown(tableHtml));
+console.log("Complex HTML with Headings:");
+console.log(complexHtml);
+console.log("\nConverted Markdown:");
+console.log(turndownService.turndown(complexHtml));

@@ -21,7 +21,13 @@ turndownService.addRule('removeAttributes', {
            node.nodeName !== 'OL' && 
            node.nodeName !== 'LI' && 
            node.nodeName !== 'BR' && 
-           node.nodeName !== 'P';
+           node.nodeName !== 'P' &&
+           node.nodeName !== 'H1' &&
+           node.nodeName !== 'H2' &&
+           node.nodeName !== 'H3' &&
+           node.nodeName !== 'H4' &&
+           node.nodeName !== 'H5' &&
+           node.nodeName !== 'H6';
   },
   replacement: function(content, node) {
     if (node.nodeName === 'PRE') {
@@ -46,6 +52,8 @@ const complexHtml = `
     Some pre-formatted code
     with multiple lines
   </pre>
+  <h3>A Subsection</h3>
+  <p>Some additional text in the subsection.</p>
 </div>
 `;
 

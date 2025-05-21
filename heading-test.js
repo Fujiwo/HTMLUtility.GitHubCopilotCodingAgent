@@ -1,7 +1,7 @@
 const TurndownService = require('turndown')
 
-// Test how tables are handled
-console.log("=== TABLE TEST ===");
+// Test with headings
+console.log("=== HEADING TEST ===");
 const turndownService = new TurndownService({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced',
@@ -12,7 +12,7 @@ const turndownService = new TurndownService({
   br: '  \n'
 });
 
-// Add the existing rule from script.js
+// Add existing rule with fix for headings
 turndownService.addRule('removeAttributes', {
   filter: function(node) {
     return node.nodeName !== 'A' && 
@@ -37,30 +37,17 @@ turndownService.addRule('removeAttributes', {
   }
 });
 
-// Test HTML table
-const tableHtml = `
-<table>
-  <thead>
-    <tr>
-      <th>Header 1</th>
-      <th>Header 2</th>
-      <th>Header 3</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Row 1, Cell 1</td>
-      <td>Row 1, Cell 2</td>
-      <td>Row 1, Cell 3</td>
-    </tr>
-    <tr>
-      <td>Row 2, Cell 1</td>
-      <td>Row 2, Cell 2</td>
-      <td>Row 2, Cell 3</td>
-    </tr>
-  </tbody>
-</table>
+// Test headings
+const headingsHtml = `
+<h1>Heading Level 1</h1>
+<h2>Heading Level 2</h2>
+<h3>Heading Level 3</h3>
+<h4>Heading Level 4</h4>
+<h5>Heading Level 5</h5>
+<h6>Heading Level 6</h6>
 `;
 
-console.log("Table HTML:", tableHtml);
-console.log("Table Markdown:", turndownService.turndown(tableHtml));
+console.log("HTML Headings:");
+console.log(headingsHtml);
+console.log("\nConverted Markdown:");
+console.log(turndownService.turndown(headingsHtml));
