@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
     const convertButton = document.getElementById('convert-button');
+    const copyButton = document.getElementById('copy-button');
+    const clearButton = document.getElementById('clear-button');
     const htmlToMarkdownOption = document.getElementById('html-to-markdown');
     const markdownToHtmlOption = document.getElementById('markdown-to-html');
     const inputLabel = document.getElementById('input-label');
@@ -11,7 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const turndownService = new TurndownService({
         headingStyle: 'atx',
         codeBlockStyle: 'fenced',
-        emDelimiter: '*'
+        emDelimiter: '*',
+        bulletListMarker: '-',
+        linkStyle: 'inlined',
+        linkReferenceStyle: 'full',
+        br: '  \n' // Two spaces followed by newline for line break
+    });
+
+    // Remove unwanted attributes from HTML elements
+    // Focus on getting clean HTML without styles, classes, etc.
+    turndownService.addRule('removeAttributes', {
+        filter: function(node) {
+            return node.nodeName !== 'A' && node.nodeName !== 'IMG';
+        },
+        replacement: function(content, node) {
+            if (node.nodeName === 'PRE') {
+                return '\n```\n' + content + '\n```\n';
+            }
+            return content;
+        }
     });
 
     // Initialize marked for Markdown to HTML conversion
@@ -20,17 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
         headerIds: false,
         mangle: false,
         sanitize: false,
-        smartypants: false
+        smartypants: false,
+        xhtml: true
     });
 
-    // Update labels based on selected conversion type
+    // Update labels and placeholder text based on selected conversion type
     function updateLabels() {
         if (htmlToMarkdownOption.checked) {
             inputLabel.textContent = 'HTML Input';
             outputLabel.textContent = 'Markdown Output';
+            inputText.placeholder = 'Enter your HTML text here...';
         } else {
             inputLabel.textContent = 'Markdown Input';
             outputLabel.textContent = 'HTML Output';
+            inputText.placeholder = 'Enter your Markdown text here...';
         }
     }
 
@@ -58,10 +81,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Copy output to clipboard
+    function copyToClipboard() {
+        outputText.select();
+        document.execCommand('copy');
+        
+        // Visual feedback
+        const originalText = copyButton.textContent;
+        copyButton.textContent = 'Copied!';
+        setTimeout(() => {
+            copyButton.textContent = originalText;
+        }, 1500);
+    }
+
+    // Clear both input and output fields
+    function clearFields() {
+        inputText.value = '';
+        outputText.value = '';
+        inputText.focus();
+    }
+
     // Event listeners
     htmlToMarkdownOption.addEventListener('change', updateLabels);
     markdownToHtmlOption.addEventListener('change', updateLabels);
     convertButton.addEventListener('click', convertText);
+    copyButton.addEventListener('click', copyToClipboard);
+    clearButton.addEventListener('click', clearFields);
+    
+    // Also convert on press of Enter when in the input field
+    inputText.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && event.ctrlKey) {
+            convertText();
+        }
+    });
 
     // Initialize labels
     updateLabels();

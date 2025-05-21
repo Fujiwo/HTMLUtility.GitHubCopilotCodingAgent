@@ -21,7 +21,8 @@
         <div class="conversion-area">
             <div class="input-area">
                 <h2 id="input-label">HTML Input</h2>
-                <textarea id="input-text" placeholder="Enter your HTML or Markdown text here..."></textarea>
+                <textarea id="input-text" placeholder="Enter your HTML text here..."></textarea>
+                <div class="info">Press Ctrl+Enter to quickly convert</div>
             </div>
             
             <button id="convert-button">Convert</button>
@@ -29,8 +30,16 @@
             <div class="output-area">
                 <h2 id="output-label">Markdown Output</h2>
                 <textarea id="output-text" readonly></textarea>
+                <div class="controls">
+                    <button id="copy-button" title="Copy to clipboard">Copy</button>
+                    <button id="clear-button" title="Clear both fields">Clear</button>
+                </div>
             </div>
         </div>
+        
+        <footer>
+            <p>Simple HTML ⟷ Markdown converter. Produces clean output without styles, classes, CSS, or JavaScript.</p>
+        </footer>
     </div>
     
     <!-- Include the necessary libraries -->
