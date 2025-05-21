@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML ⟷ Markdown Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>HTML ⟷ Markdown Converter</h1>
+        
+        <div class="conversion-options">
+            <input type="radio" id="html-to-markdown" name="conversion-type" value="html-to-markdown" checked>
+            <label for="html-to-markdown">HTML → Markdown</label>
+            
+            <input type="radio" id="markdown-to-html" name="conversion-type" value="markdown-to-html">
+            <label for="markdown-to-html">Markdown → HTML</label>
+        </div>
+        
+        <div class="conversion-area">
+            <div class="input-area">
+                <h2 id="input-label">HTML Input</h2>
+                <textarea id="input-text" placeholder="Enter your HTML text here..."></textarea>
+                <div class="info">Press Ctrl+Enter to quickly convert</div>
+            </div>
+            
+            <button id="convert-button">Convert</button>
+            
+            <div class="output-area">
+                <h2 id="output-label">Markdown Output</h2>
+                <textarea id="output-text" readonly></textarea>
+                <div class="controls">
+                    <button id="copy-button" title="Copy to clipboard">Copy</button>
+                    <button id="clear-button" title="Clear both fields">Clear</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Simple HTML ⟷ Markdown converter. Produces clean output without styles, classes, CSS, or JavaScript.</p>
+        </footer>
+    </div>
+    
+    <!-- Include the necessary libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
