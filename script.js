@@ -94,16 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize marked for Markdown to HTML conversion
-    // Configure marked to produce clean, minimal HTML
-    marked.setOptions({
-        headerIds: false,
-        mangle: false,
-        sanitize: false,
-        smartypants: false,
-        xhtml: true
-    });
-
     // Update labels and placeholder text based on selected conversion type
     const updateLabels = () => {
         if (htmlToMarkdownOption.checked) {
@@ -133,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 outputText.value = markdown;
             } else {
                 // Convert Markdown to HTML
-                const html = marked.parse(text);
+                const html = markdown.parse(text);
                 outputText.value = html;
             }
         } catch (error) {
@@ -188,3 +178,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize labels
     updateLabels();
 });
+
+window.onload = async () =>  await markdown.ready;
