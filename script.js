@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         br: '  \n' // Two spaces followed by newline for line break
     });
 
+    // Ignore style and script elements completely
+    turndownService.addRule('ignoreStyleAndScript', {
+        filter: ['style', 'script'],
+        replacement: () => ''
+    });
+
     // Remove unwanted attributes from HTML elements
     // Focus on getting clean HTML without styles, classes, etc.
     turndownService.addRule('removeAttributes', {
