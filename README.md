@@ -24,6 +24,15 @@ A simple web-based tool to convert between HTML and Markdown formats. The conver
 5. View the converted output
 6. Use "Copy" button to copy the result to clipboard
 
+### Files
+
+- `index.html`: main HTML file providing the user interface.
+- `script.js`: JavaScript file implementing the main logic, such as HTML/Markdown conversion and UI manipulation.
+- `style.css`: CSS file defining the application's style.
+- `package.json`: A file that manages project dependencies and metadata.
+- `LICENSE`: describes the MIT licence.
+- `README.md`: A file describing this project and how to use it.
+
 ### Technologies Used
 
 - HTML5
