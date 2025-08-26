@@ -6,6 +6,18 @@
 
 段落。**強調** や *斜体*、`インラインコード`。
 
+## リンク
+
+[内部リンク](#part1)
+[Google Map](https://www.google.co.jp/maps/)
+[Yahoo!](https://www.yahoo.co.jp)
+
+<a id = "part1">内部リンク</a>
+
+## 画像
+
+![猫](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/2880px-Cat_poster_1.jpg)
+
 ## リスト
 
 - りんご
