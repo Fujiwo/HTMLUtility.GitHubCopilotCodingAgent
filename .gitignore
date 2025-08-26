@@ -7,6 +7,7 @@ package-lock.json
 
 # Test files
 tests/
+test-conversion.md
 
 # Environment files
 .env
