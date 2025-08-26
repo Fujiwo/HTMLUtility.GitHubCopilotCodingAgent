@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements using modern querySelector where appropriate
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
+    const previewText = document.getElementById('preview-text');
     const convertButton = document.getElementById('convert-button');
     const copyButton = document.getElementById('copy-button');
     const clearButton = document.getElementById('clear-button');
@@ -113,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!text) {
             outputText.value = '';
+            previewText.innerHTML = '';
             return;
         }
 
@@ -120,11 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (htmlToMarkdownOption.checked) {
                 // Convert HTML to Markdown
                 const markdown = turndownService.turndown(text);
+                console.log(markdown)
                 outputText.value = markdown;
+                previewText.innerHTML = text;
             } else {
                 // Convert Markdown to HTML
                 const html = markdown.parse(text);
+                console.log(html)
                 outputText.value = html;
+                previewText.innerHTML = html;
             }
         } catch (error) {
             outputText.value = `Error during conversion: ${error.message}`;
