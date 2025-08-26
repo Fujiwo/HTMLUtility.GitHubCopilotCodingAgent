@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Convert between HTML and Markdown formats with this simple online tool">
     <title>HTML ⟷ Markdown Converter</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,6 +38,11 @@
                     <button id="clear-button" title="Clear both fields" aria-label="Clear both fields">Clear</button>
                 </div>
             </div>
+
+            <div class="previrew-area">
+                <h2 id="preview-label">Preview</h2>
+                <div id="preview-text" readonly aria-labelledby="preview-label"></div>
+            </div>
         </section>
         
         <footer>
@@ -47,6 +53,9 @@
     <!-- Include the necessary libraries -->
     <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.js"></script>
     <script src='https://cdn.jsdelivr.net/gh/rsms/markdown-wasm@v1.1.2/dist/markdown.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
