@@ -200,6 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         mermaid.init(undefined, previewText.querySelectorAll('.mermaid'));
                     }, 100);
                 }
+                
+                // Trigger MathJax rendering after content is updated
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    setTimeout(() => {
+                        MathJax.typesetPromise([previewText]).catch((err) => {
+                            console.warn('MathJax rendering error:', err);
+                        });
+                    }, 200);
+                }
             }
         } catch (error) {
             console.warn(`Error during conversion: ${error.message}`);
