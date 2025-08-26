@@ -111,9 +111,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Process math blocks - convert ```math to MathJax format
     const processMathBlocks = (html) => {
         // Convert ```math blocks to MathJax display math
-        return html.replace(/```math\s*([\s\S]*?)\s*```/g, (match, mathContent) => {
+        html = html.replace(/```math\s*([\s\S]*?)\s*```/g, (match, mathContent) => {
             return `<div class="math-block">$$${mathContent.trim()}$$</div>`;
         });
+        
+        // Also handle math blocks that were converted to code elements (with possible <br> tags)
+        html = html.replace(/<pre><code class="language-math">([\s\S]*?)<\/code><\/pre>/g, (match, mathContent) => {
+            // Remove <br> tags and clean up the content
+            const cleanContent = mathContent.replace(/<br\s*\/?>/g, '\n').trim();
+            return `<div class="math-block">$$${cleanContent}$$</div>`;
+        });
+        
+        return html;
     };
 
     // Render mermaid diagrams
