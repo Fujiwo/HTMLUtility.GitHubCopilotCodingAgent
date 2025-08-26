@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements using modern querySelector where appropriate
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
-    const previewText = document.getElementById('preview-text');
     const convertButton = document.getElementById('convert-button');
     const copyButton = document.getElementById('copy-button');
     const clearButton = document.getElementById('clear-button');
@@ -95,97 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize Mermaid
-    let mermaidInitialized = false;
-    const initializeMermaid = () => {
-        if (typeof mermaid !== 'undefined' && !mermaidInitialized) {
-            mermaid.initialize({ 
-                startOnLoad: false,
-                theme: 'default',
-                securityLevel: 'loose'
-            });
-            mermaidInitialized = true;
-        }
-    };
-
-    // Process math blocks - convert ```math to MathJax format
-    const processMathBlocks = (html) => {
-        // Convert ```math blocks to MathJax display math
-        html = html.replace(/```math\s*([\s\S]*?)\s*```/g, (match, mathContent) => {
-            return `<div class="math-block">$$${mathContent.trim()}$$</div>`;
-        });
-        
-        // Also handle math blocks that were converted to code elements (with possible <br> tags)
-        html = html.replace(/<pre><code class="language-math">([\s\S]*?)<\/code><\/pre>/g, (match, mathContent) => {
-            // Remove <br> tags and clean up the content
-            const cleanContent = mathContent.replace(/<br\s*\/?>/g, '\n').trim();
-            return `<div class="math-block">$$${cleanContent}$$</div>`;
-        });
-        
-        return html;
-    };
-
-    // Render mermaid diagrams
-    const renderMermaidDiagrams = async (element) => {
-        const mermaidElements = element.querySelectorAll('pre code.language-mermaid, .language-mermaid');
-        
-        for (let i = 0; i < mermaidElements.length; i++) {
-            const mermaidElement = mermaidElements[i];
-            const mermaidCode = mermaidElement.textContent;
-            
-            try {
-                const graphDefinition = mermaidCode.trim();
-                const { svg } = await mermaid.render(`mermaid-${Date.now()}-${i}`, graphDefinition);
-                
-                // Replace the code block with the SVG
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mermaid';
-                wrapper.innerHTML = svg;
-                
-                if (mermaidElement.parentNode.tagName === 'PRE') {
-                    mermaidElement.parentNode.parentNode.replaceChild(wrapper, mermaidElement.parentNode);
-                } else {
-                    mermaidElement.parentNode.replaceChild(wrapper, mermaidElement);
-                }
-            } catch (error) {
-                console.error('Mermaid rendering error:', error);
-                // Keep the original code block if rendering fails
-            }
-        }
-    };
-
-    // Update preview content
-    const updatePreview = async (htmlContent) => {
-        if (!htmlContent || htmlToMarkdownOption.checked) {
-            previewText.innerHTML = '';
-            return;
-        }
-
-        // Process math blocks first
-        const processedHtml = processMathBlocks(htmlContent);
-        previewText.innerHTML = processedHtml;
-
-        // Initialize Mermaid if needed
-        initializeMermaid();
-
-        // Render Mermaid diagrams
-        if (typeof mermaid !== 'undefined') {
-            await renderMermaidDiagrams(previewText);
-        }
-
-        // Apply Prism syntax highlighting
-        if (typeof Prism !== 'undefined') {
-            Prism.highlightAllUnder(previewText);
-        }
-
-        // Re-render MathJax
-        if (typeof MathJax !== 'undefined') {
-            MathJax.typesetPromise([previewText]).catch((err) => {
-                console.error('MathJax rendering error:', err);
-            });
-        }
-    };
-
     // Update labels and placeholder text based on selected conversion type
     const updateLabels = () => {
         if (htmlToMarkdownOption.checked) {
@@ -200,30 +108,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Conversion function
-    const convertText = async () => {
+    const convertText = () => {
         const text = inputText.value.trim();
         
         if (!text) {
             outputText.value = '';
-            await updatePreview('');
             return;
         }
 
         try {
             if (htmlToMarkdownOption.checked) {
                 // Convert HTML to Markdown
-                const markdownResult = turndownService.turndown(text);
-                outputText.value = markdownResult;
-                await updatePreview('');
+                const markdown = turndownService.turndown(text);
+                outputText.value = markdown;
             } else {
                 // Convert Markdown to HTML
-                const htmlResult = markdown.parse(text);
-                outputText.value = htmlResult;
-                await updatePreview(htmlResult);
+                const html = markdown.parse(text);
+                outputText.value = html;
             }
         } catch (error) {
             outputText.value = `Error during conversion: ${error.message}`;
-            await updatePreview('');
         }
     };
 
@@ -254,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearFields = () => {
         inputText.value = '';
         outputText.value = '';
-        previewText.innerHTML = '';
         inputText.focus();
     };
 
