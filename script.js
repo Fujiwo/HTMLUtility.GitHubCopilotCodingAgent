@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const processedMarkdown = processSpecialBlocks(text);
                 let html;
                 
-                // Use markdown-wasm if available, otherwise use simple converter
-                if (typeof markdown !== 'undefined' && markdown.parse) {
-                    html = markdown.parse(processedMarkdown);
+                // Use marked if available, otherwise use simple converter
+                if (typeof marked !== 'undefined' && marked.parse) {
+                    html = marked.parse(processedMarkdown);
                 } else {
                     html = simpleMarkdownToHtml(processedMarkdown);
                 }
@@ -264,13 +264,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLabels();
 });
 
-window.onload = async () => {
-    // Wait for markdown-wasm if available
-    if (typeof markdown !== 'undefined' && markdown.ready) {
-        try {
-            await markdown.ready;
-        } catch (e) {
-            console.log('Markdown-wasm not available:', e);
-        }
-    }
-};
+
