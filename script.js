@@ -136,10 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Process mermaid and math blocks according to conversion rules
     const processSpecialBlocks = (markdownText) => {
         // Rule 1: Convert ```mermaid\n(content)\n``` to <pre class="mermaid">(content)</pre>
-        markdownText = markdownText.replace(/```mermaid\n([\s\S]*?)\n```/g, '<pre class="mermaid">$1</pre>');
+        markdownText = markdownText.replace(/```mermaid\n([\s\S]*?)\n```/g, (match, content) => {
+            console.log('Processing mermaid block');
+            return `<pre class="mermaid">${content}</pre>`;
+        });
         
-        // Rule 2: Convert ```math\n(content)\n``` to empty string (remove entirely)
-        markdownText = markdownText.replace(/```math\n[\s\S]*?\n```/g, '');
+        // Rule 2: Convert ```math\n(content)\n``` to <math>(content)</math>
+        markdownText = markdownText.replace(/```math\n([\s\S]*?)\n```/g, (match, content) => {
+            console.log('Processing math block');
+            return `<math>${content}</math>`;
+        });
         
         return markdownText;
     };
@@ -196,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } catch (error) {
+            console.warn(`Error during conversion: ${error.message}`);
             outputText.value = `Error during conversion: ${error.message}`;
         }
     };
